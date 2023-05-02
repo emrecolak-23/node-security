@@ -1,3 +1,5 @@
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const path = require('path');
 
@@ -13,6 +15,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
+const certificate = {
+  cert: fs.readFileSync('cert.pem'),
+  key: fs.readFileSync('key.pem'),
+};
+
+https.createServer(certificate, app).listen(PORT, () => {
   console.log(`Listening on port ${PORT}...`);
 });
